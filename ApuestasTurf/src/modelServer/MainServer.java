@@ -5,23 +5,44 @@ import model.Race;
 /** Clase que administra todos los servicios web **/
 public class MainServer {
 	
-	
+	/** Tiempos para controlar el ciclo**/
+	/** Tiempo de espera **/
 	public static final int TIME_WAIT = 20;
+	
+	/**Tiempo de apuesta **/
 	public static final int TIME_BETS = 60;
+	
+	/**Tiempo de carrera**/
 	public static final int TIME_RACE = 60;
+	
+	/** Clase manejadora de apuestas**/
 	private BetTCPServer betTCP;
+	
+	/**Clase manejadora del audio**/
 	private Thread audioUDP;
+	
+	/**Clase manejadora de nviar los datos UDP**/
 	private UDPMulticastServer dataMulticast;
+	
+	/** Clase que modela la carrera **/
 	private Race race;
+	
+	/** Booleans para entender en que tiempo de la carrera se esta **/
 	private boolean inBets;
 	private boolean inRace;
 	private boolean inWait;
+	
+	/** Enteros que representan el tiempo faltante para el respectivo ciclo **/
 	private int minutes;
 	private int seconds;
 	
+	/** Base de datos para mostrar elementos de la pagina web al usuario**/
 	public static DataBase dataBase;
 	
 	
+	/**
+	 * Constructor del servidor principal que maneja todos los servicios
+	 */
 	public MainServer() {
 		
 		betTCP = new BetTCPServer();
@@ -33,6 +54,9 @@ public class MainServer {
 		
 	}
 	
+	/**
+	 * Metodo que avanza en el tiempo, y cambia el estado del ciclo de apuestas
+	 */
 	public void advanceTime() {
 		
 		if(minutes>0) {	
@@ -51,6 +75,9 @@ public class MainServer {
 		}	
 	}
 	
+	/**
+	 * Metodo encargado de cambiar el estado del cilo de apuestas
+	 */
 	public void changeStatus() {
 		
 		if(!inWait) {
@@ -74,7 +101,10 @@ public class MainServer {
 			seconds = 0;
 		}
 	}
-		
+	
+	/**
+	 * Metodo que inicia la simulacion de la carrera
+	 */
 	public void startRace() {
 		
 		if(audioUDP.isAlive()) {
@@ -87,6 +117,10 @@ public class MainServer {
 		
 	}
 	
+	/**
+	 * Metodo de envio de datos encargado de mostrar el estado 
+	 * @return
+	 */
 	public String dataToSend() {
 		String result = "" ;
 		
